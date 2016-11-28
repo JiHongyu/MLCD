@@ -6,7 +6,7 @@ import mnets
 
 # gn :(n=128, k=16, maxk=16, mu=0.3, maxc=32, minc=32)
 # (n=100, k=30, maxk=50, mu=0.2, t1=2.5, on=5, om=3)
-input_cmd = mnets.lfr_cmd(n=128, k=16, maxk=16, mu=0.3, maxc=32, minc=32, on=5, om=2)
+input_cmd = mnets.lfr_cmd(n=128, k=16, maxk=16, mu=0.3, maxc=32, minc=32, on=1, om=2)
 # 生成测试网络
 print('生成测试网络数据')
 gn_benchmark = mnets.lfr_sn_benchmark(input_cmd)

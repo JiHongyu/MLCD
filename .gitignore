@@ -1,0 +1,9 @@
+.idea/
+community.dat
+mlcd/__pycache__/
+mnets/__pycache__/
+network.dat
+sn_benchamrk.gml
+statistics.dat
+time_seed.dat
+tree_data.txt
