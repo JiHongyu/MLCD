@@ -4,7 +4,8 @@ import copy
 import time
 
 import networkx as nx
-from numpy import random
+#from numpy import random
+import random
 
 def lfr_cmd(n, k, maxk, mu, **kwargs):
 
@@ -33,7 +34,7 @@ def process_original_lfr_data(name='L1'):
     with open('network.dat', 'r') as f:
         for line in f:
             _t = line.split()
-            g.add_edge(int(_t[0]),int(_t[1]))
+            g.add_edge(int(_t[0]), int(_t[1]))
 
     # 处理 benchmark 社团数据，社团存储为社团集合
     with open('community.dat', 'r') as f:

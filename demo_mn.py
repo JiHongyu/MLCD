@@ -42,7 +42,7 @@ lcd_algo.dump_dendrogram(path='.\\result\\')
 
 # 7. 生成 gml 文件
 print('7. 生成 gml 文件吧')
-mnets.save_mn_benchmark(lfr_benchmark, '.\\result\\', link_coms=result['link_coms'])
+mnets.save_mn_benchmark(lfr_benchmark, '.\\result\\')
 
 # 8. 计算 Normalized mutual information
 print('8. 计算 Normalized mutual information')

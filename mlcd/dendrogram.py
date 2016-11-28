@@ -1,4 +1,4 @@
-#from collections import s
+from .edge import Edge
 
 class TreeNode:
     Cnt = 0
@@ -49,6 +49,7 @@ class Dendrogram:
         生成系统树图
         :return: 返回系统树图的根节点
         """
+
         # 初始迭代森林 [(TreeNode,(nodes..),...]
         forest = [(TreeNode(n, 1.0), {n}) for n in self.__node_set]
 
