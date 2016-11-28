@@ -79,7 +79,7 @@ def gn_sn_benchmark(mu:float = 0.1):
 def rewire_benchmark(g: nx.Graph, com2node: dict, node2com: dict):
 
     # rewiring links without destroying structure of the network
-    random.seed(int(time.time() * 100))
+    random.seed(int(time.time()))
 
     # rewire inner links
     rand_nodes = g.nodes()
@@ -92,14 +92,14 @@ def rewire_benchmark(g: nx.Graph, com2node: dict, node2com: dict):
         com = random.choice(in_coms)
 
         # 选择与 x1 相邻的社团内节点 x2，构成边 x1--x2
-        _t = list(set(g.neighbors(x1) & set(com2node[com])))
+        _t = list(set(g.neighbors(x1)) & set(com2node[com]))
         if len(_t) < 1:
             continue
         x2 = random.choice(_t)
 
         # 选择与 x1 在一个社团的边 y1--y2
         y1 = random.choice(com2node[com])
-        _t = list(set(g.neighbors(y1) & set(com2node[com])))
+        _t = list(set(g.neighbors(y1)) & set(com2node[com]))
         if len(_t) < 1:
             continue
         y2 = random.choice(_t)
@@ -109,10 +109,10 @@ def rewire_benchmark(g: nx.Graph, com2node: dict, node2com: dict):
 
         if len(_t) == 3:
             random.shuffle(_t)
-            g.remove_from_edges([(x1, x2), (y1, y2)])
+            g.remove_edges_from([(x1, x2), (y1, y2)])
             g.add_edges_from([(_t[0], _t[1]), (_t[1], _t[2])])
         elif len(_t) == 4:
-            g.remove_from_edges([(x1, x2), (y1, y2)])
+            g.remove_edges_from([(x1, x2), (y1, y2)])
             g.add_edges_from([(x1, y1), (x2, y2)])
         else:
             pass
@@ -128,21 +128,21 @@ def rewire_benchmark(g: nx.Graph, com2node: dict, node2com: dict):
         com = random.choice(in_coms)
 
         # 选择与 x1 相邻的社团外节点 x2，构成边 x1--x2
-        _t = list(set(g.neighbors(x1) - set(com2node[com])))
+        _t = list(set(g.neighbors(x1)) - set(com2node[com]))
         if len(_t) < 1:
             continue
         x2 = random.choice(_t)
 
         # 选择与 x1 在一个社团的节点 y1 的外边 y1--y2
         y1 = random.choice(com2node[com])
-        _t = list(set(g.neighbors(y1) - set(com2node[com])))
+        _t = list(set(g.neighbors(y1)) - set(com2node[com]))
         if len(_t) < 1:
             continue
         y2 = random.choice(_t)
 
         # 交换边对节点 x1--x2, y1--y2
         if x1 is not y1:
-            g.remove_from_edges([(x1, x2), (y1, y2)])
+            g.remove_edges_from([(x1, x2), (y1, y2)])
             g.add_edges_from([(x1, y2), (x2, y1)])
         else:
             pass
@@ -157,7 +157,7 @@ def lfr_mn_benchmark(command:str, num_of_layer:int):
 
     networks = []
 
-    for layer in num_of_layer:
+    for layer in range(num_of_layer):
         g = copy.deepcopy(g_ori)
         rewire_benchmark(g, com2node, node2com)
         networks.append(g)

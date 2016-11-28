@@ -58,6 +58,10 @@ class Dendrogram:
         for n1, n2, simi in self.__node_pairs_data:
             if abs(simi) < 0.0001 or len(forest) is 1:
                 break
+
+            # 相似对数据使用统计
+            self.__pair_used += 1
+
             # 计算节点 n1和n2 所属的子树
             tree1 = Dendrogram.__find_tree(forest, n1)
             tree2 = Dendrogram.__find_tree(forest, n2)
@@ -100,7 +104,7 @@ class Dendrogram:
                 forest.append((new_tree_node, new_nodes,))
                 self.__leaves_info[new_tree_node] = tuple(new_nodes)
 
-            self.__pair_used += 1
+
 
         if len(forest) is 1:
 

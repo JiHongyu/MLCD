@@ -36,7 +36,7 @@ def save_sn_benchmark(benchmark, path:str, name=None, link_coms=None, node_coms=
 
     nx.write_gml(g, path + name, stringizer=lambda x: str(x) if not isinstance(x, str) else x)
 
-def save_mn_benchamrk(benchmark,path:str,name=None):
+def save_mn_benchamrk(benchmark, path:str,name=None):
 
     if name == None:
         name = 'mn_benchamrk'
