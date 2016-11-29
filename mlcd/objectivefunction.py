@@ -6,7 +6,7 @@
 # link_coms：边社团
 # node_coms：点社团
 
-def objectfunc_1(networks, link_coms, node_coms):
+def objectfunc_by_mean(networks, link_coms, node_coms):
 
     cur_f = 0
     all_link_num = 0
@@ -24,3 +24,31 @@ def objectfunc_1(networks, link_coms, node_coms):
         all_link_num += cur_com
 
     return cur_f/all_link_num
+
+def objectfunc_by_max(networks, link_coms, node_coms):
+    cur_f = 0
+    all_link_num = 0
+
+    for link_com, node_com in zip(link_coms, node_coms):
+
+        # 计算社团在每一层的最大边数
+        cur_com = 0
+        for g in networks:
+            _t = 0
+            for link in link_com:
+                n1, n2 = link.node()
+                if n2 in g.neighbors(n1):
+                    _t += 1
+            cur_com = max(cur_com, _t)
+
+        min_com = (len(node_com) - 1)
+        max_com = 0.5 * len(node_com) * (len(node_com) - 1)
+        density = (cur_com-min_com)/(max_com-min_com) if abs(max_com-min_com) > 0.0001 else 0
+
+        cur_f += cur_com * density
+        all_link_num += cur_com
+
+    return cur_f / all_link_num
+
+
+

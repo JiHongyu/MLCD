@@ -69,6 +69,10 @@ class MNetwork:
 
         return linkpair_similarity
 
+    def nodes(self):
+
+        return list(self.projectNetwork.nodes())
+
     def links(self):
         _links = list()
 

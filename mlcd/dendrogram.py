@@ -138,7 +138,7 @@ class Dendrogram:
     def serialize(self, tree=None):
         return self.__serialize(tree=self.__root)
 
-    def generate_link_community(self, cut_simi=0.0, least_com_num=0):
+    def generate_community(self, cut_simi=0.0, least_com_num=0):
 
         # 系统树划分
         subtrees = Dendrogram.__cut_tree(self.__root, cut_simi)
@@ -150,17 +150,6 @@ class Dendrogram:
             if len(one_com) >= least_com_num:
                 covers.append(tuple(one_com))
         return covers
-
-    def generate_node_community(self, cut_simi=0.0, least_com_num=0):
-
-        covers = self.generate_link_community(cut_simi, least_com_num)
-
-        return self.__convert_link2node_community(covers)
-
-    def generate_community(self, cut_simi=0.0, least_com_num=1):
-        covers = self.generate_link_community(cut_simi, least_com_num)
-
-        return covers, self.__convert_link2node_community(covers)
 
     @classmethod
     def __find_tree(cls, forest, node):
@@ -200,15 +189,7 @@ class Dendrogram:
 
         return cut_well_trees
 
-    @classmethod
-    def __convert_link2node_community(cls, link_coms):
-        node_coms = []
-        for com in link_coms:
-            com_node_set = set()
-            for edge in com:
-                com_node_set.update(edge.node())
-            node_coms.append(tuple(com_node_set))
-        return node_coms
+
 
     @property
     def info(self):

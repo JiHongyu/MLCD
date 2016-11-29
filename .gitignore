@@ -2,6 +2,7 @@
 community.dat
 mlcd/__pycache__/
 mnets/__pycache__/
+result/
 network.dat
 sn_benchamrk.gml
 statistics.dat
