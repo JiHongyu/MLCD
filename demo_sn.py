@@ -6,10 +6,10 @@ import mnets
 
 path = '.\\result\\'
 # (n=100, k=30, maxk=50, mu=0.2, t1=2.5, on=5, om=3)
-input_cmd = mnets.lfr_cmd(n=100, k=20, maxk=40, mu=0.05, t1=2.5, on=10, om=2, maxc=2, minc=2)
+input_cmd = mnets.lfr_cmd(n=100, k=20, maxk=50, mu=0.05, t1=2, on=2, om=2)
 # 生成测试网络
 print('生成测试网络数据')
-lfr_benchmark = mnets.lfr_sn_benchmark(command=input_cmd,is_new=True)
+lfr_benchmark = mnets.lfr_sn_benchmark(command=input_cmd, is_new=True)
 mnets.save_sn_benchmark(lfr_benchmark, path=path)
 
 network = lfr_benchmark['network']

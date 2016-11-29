@@ -5,7 +5,7 @@ import numpy as np
 import mlcd
 import mnets
 
-repeat_num = 10
+repeat_num = 5
 
 lcd_algo = mlcd.MNetworkLCD()
 
@@ -13,10 +13,10 @@ nmi_data = []
 com_qualify_data = []
 linkpair_used_rate_data = []
 
-mu_seq = np.linspace(0, 0.8, 10)
+mu_seq = np.linspace(0.1, 0.5, 7)
 
 for mu in mu_seq:
-    input_cmd = mnets.lfr_cmd(n=128, k=16, maxk=16, mu=mu, maxc=32, minc=32, on=0, om=0)
+    input_cmd = mnets.lfr_cmd(n=100, k=20, maxk=50, mu=mu, t1=2, on=2, om=2)
 
     t_nmi = []
     t_com_qualify = []
@@ -28,7 +28,7 @@ for mu in mu_seq:
         lcd_algo.set_networks(networks)
 
         # 设置相似计算函数，并计算连边相似性
-        lcd_algo.set_linkpair_simi_algo(mlcd.linkpair_simi_1)
+        lcd_algo.set_linkpair_simi_algo(mlcd.linkpair_simi_2)
         lcd_algo.cal_linkpair_similarity()
 
         # 系统树信息
