@@ -38,6 +38,7 @@ class Dendrogram:
         self.__leaves_info = dict()
 
         self.__pair_used = 0
+        self.__pair_redu = 0
 
         # 系统树根节点
         self.__root = self.__generate_tree()
@@ -67,6 +68,7 @@ class Dendrogram:
             tree1 = Dendrogram.__find_tree(forest, n1)
             tree2 = Dendrogram.__find_tree(forest, n2)
             if tree1 is tree2:
+                self.__pair_redu += 1
                 continue
 
             if abs(tree1[0].simi - tree2[0].simi) < 0.0000001 and (
@@ -199,6 +201,7 @@ class Dendrogram:
         d['leaf_num'] = len(self.__node_set)
         d['pair_num'] = len(self.__node_pairs_data)
         d['pair_used'] = self.__pair_used
+        d['pair_redu'] = self.__pair_redu
         d['simi_min'] = self.__node_pairs_data[self.__pair_used-1][2]
         d['simi_max'] = self.__node_pairs_data[0][2]
         return d

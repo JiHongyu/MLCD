@@ -6,10 +6,10 @@ import mnets
 
 # gn :(n=128, k=16, maxk=16, mu=0.3, maxc=32, minc=32)
 # (n=100, k=30, maxk=50, mu=0.2, t1=2.5, on=5, om=3)
-input_cmd = mnets.lfr_cmd(n=128, k=16, maxk=16, mu=0.2, maxc=32, minc=32, on=0, om=0)
+input_cmd = mnets.lfr_cmd(n=100, k=30, maxk=50, mu=0.2, t1=2.5, on=5, om=3)
 # 生成测试网络
 print('生成测试网络数据')
-lfr_benchmark = mnets.lfr_mn_benchmark(input_cmd, num_of_layer=4)
+lfr_benchmark = mnets.lfr_mn_benchmark(input_cmd, num_of_layer=1)
 
 networks = lfr_benchmark['networks']
 
@@ -22,7 +22,7 @@ lcd_algo.set_networks(networks)
 
 # 2. 设置相似性计算算法
 print('2. 设置相似性计算算法')
-lcd_algo.set_linkpair_simi_algo(mlcd.linkpair_simi_1)
+lcd_algo.set_linkpair_simi_algo(mlcd.linkpair_simi_2)
 
 # 3. 计算连边相似性
 print('3. 计算连边相似性')

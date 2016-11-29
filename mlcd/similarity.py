@@ -67,7 +67,11 @@ def linkpair_simi_2(networks, src, mid, dst, alpha: float = 0.5):
                 crslayer_numerator += len(set(g1.neighbors(src)) & set(g2.neighbors(dst)))
                 crslayer_denumerator += np.sqrt(len(g1.neighbors(src)) * len(g2.neighbors(dst)))
 
-    simi_num = inlayer_numerator + 2 * alpha * crslayer_numerator / (num_of_nets - 1)
-    simi_den = inlayer_denumerator + 2 * alpha * crslayer_denumerator / (num_of_nets - 1)
+    if num_of_nets != 1:
+        simi_num = inlayer_numerator + 2 * alpha * crslayer_numerator / (num_of_nets - 1)
+        simi_den = inlayer_denumerator + 2 * alpha * crslayer_denumerator / (num_of_nets - 1)
+    else:
+        simi_num = inlayer_numerator
+        simi_den = inlayer_denumerator
 
     return simi_num / simi_den if simi_den > 0.00001 else 0

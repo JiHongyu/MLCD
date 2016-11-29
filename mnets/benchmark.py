@@ -7,6 +7,14 @@ import networkx as nx
 #from numpy import random
 import random
 
+
+def cmd_cache(func):
+
+    def inner(*args, **kwargs):
+        pass
+    pass
+
+
 def lfr_cmd(n, k, maxk, mu, **kwargs):
 
     cmd = '-N %s -k %s -maxk %s -mu %s' %\
@@ -56,11 +64,10 @@ def process_original_lfr_data(name='L1'):
 
     return d
 
+def lfr_sn_benchmark(command:str, is_new=True):
 
-
-def lfr_sn_benchmark(command:str):
-
-    os.system('lfr %s' % command)
+    if is_new:
+        os.system('lfr %s' % command)
 
     net_info = process_original_lfr_data(name='single network')
 
