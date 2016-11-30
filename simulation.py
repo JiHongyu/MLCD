@@ -5,7 +5,7 @@ import numpy as np
 import mlcd
 import mnets
 
-repeat_num = 5
+repeat_num = 10
 
 lcd_algo = mlcd.MNetworkLCD()
 
@@ -16,7 +16,7 @@ linkpair_used_rate_data = []
 mu_seq = np.linspace(0.1, 0.5, 7)
 
 for mu in mu_seq:
-    input_cmd = mnets.lfr_cmd(n=100, k=20, maxk=50, mu=mu, t1=2, on=2, om=2)
+    input_cmd = mnets.lfr_cmd(n=1000, k=20, maxk=50, mu=mu, t1=2, on=20, om=2, minc=10, maxc=50)
 
     t_nmi = []
     t_com_qualify = []
