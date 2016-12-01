@@ -71,7 +71,7 @@ class Dendrogram:
                 self.__pair_redu += 1
                 continue
 
-            if abs(tree1[0].simi - tree2[0].simi) < 0.0000001 and (
+            if abs(tree1[0].simi - tree2[0].simi) < 0.00001 and (
                     tree1[0].info == 'inner' or tree2[0].info == 'inner'):
                 # 两棵树相似性相同，可以直接将两棵子树的孩子合并
 

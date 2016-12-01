@@ -54,8 +54,14 @@ class MNetwork:
 
         linkpairs = self.linkpairs()
         linkpair_similarity = []
-        for src, mid, dst in linkpairs:
 
+        linkpair_num = len(linkpairs)
+
+        cnt = 0
+        for src, mid, dst in linkpairs:
+            cnt += 1
+            if ( cnt%50000 == 0):
+                print('计算相似性 %5d/%5d'%(cnt, linkpair_num))
             # 计算相似性
             simi = self.linkpair_simi_func(src=src, mid=mid, dst=dst)
 

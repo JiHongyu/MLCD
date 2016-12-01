@@ -41,7 +41,7 @@ def linkpair_simi_1(networks, src, mid, dst, alpha: float = 0.5):
     cross_layer_simi = len(crslayer_src_neighbors & crslayer_dst_neighbors)\
                        / len(crslayer_src_neighbors | crslayer_dst_neighbors)
 
-    return (1 - alpha) * in_layer_simi + alpha * cross_layer_simi
+    return (in_layer_simi + alpha * cross_layer_simi)/(1+alpha)
 
 
 def linkpair_simi_2(networks, src, mid, dst, alpha: float = 0.5):

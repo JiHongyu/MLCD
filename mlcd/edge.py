@@ -44,3 +44,6 @@ class Edge:
 
     def node(self):
         return self.__n1, self.__n2
+
+    def rnode(self):
+        return self.__n2, self.__n1

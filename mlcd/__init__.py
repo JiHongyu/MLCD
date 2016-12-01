@@ -1,4 +1,4 @@
-from .mlcd import MNetworkLCD, preprocess_node_community
+from .mlcd import *
 from .validation import *
 from .similarity import *
 from .objectivefunction import *

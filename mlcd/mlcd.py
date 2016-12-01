@@ -42,10 +42,11 @@ class MNetworkLCD:
         self.dendrogram = None
         self.func_curve = None
 
+        self.linkpair = None
         self.link_set = None
         self.node_set = None
 
-    def set_networks(self,networks):
+    def set_networks(self, networks):
         self.mnetworks = MNetwork(networks=networks)
         self.link_set = set(self.mnetworks.links())
         self.node_set = set(self.mnetworks.nodes())
@@ -56,12 +57,27 @@ class MNetworkLCD:
 
     def cal_linkpair_similarity(self):
 
-        _linkpair = self.mnetworks.link_similarity_table()
+        self.linkpair = self.mnetworks.link_similarity_table()
         _links = self.mnetworks.links()
-        self.dendrogram = Dendrogram(_linkpair, _links)
+        self.dendrogram = Dendrogram(self.linkpair, _links)
 
     def set_objectfunc_algo(self, algo):
         self.mnetworks.set_objectfunc_algo(algo)
+
+    def yield_communities(self, iterable=None):
+
+        if iterable == None:
+            cal_num = 20
+            iterable = (x/cal_num for x in range(cal_num))
+
+        for cut_simi in iterable:
+
+            link_coms = self.dendrogram.generate_community(cut_simi=cut_simi, least_com_num=1)
+            node_coms = convert_link2node_community(link_coms)
+            cur_f = self.mnetworks.objectfunc(link_coms, node_coms)
+
+            yield link_coms, node_coms, cur_f
+
 
     def cal_optimization_community(self, cal_num = 100):
         """利用划分密度进行树划分"""
@@ -77,8 +93,6 @@ class MNetworkLCD:
             link_coms = self.dendrogram.generate_community(cut_simi=cut_simi, least_com_num=1)
 
             node_coms = convert_link2node_community(link_coms)
-
-            #node_coms, used_rate = preprocess_node_community(node_coms, self.node_set)
 
             cur_f = self.mnetworks.objectfunc(link_coms, node_coms)
 
