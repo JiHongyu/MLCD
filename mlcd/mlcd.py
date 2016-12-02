@@ -83,7 +83,7 @@ class MNetworkLCD:
         """利用划分密度进行树划分"""
 
         _curve = [0]*cal_num
-        max_f = 0
+        max_f = -100
         best_link_coms = None
         best_node_coms = None
         for depth in range(cal_num):

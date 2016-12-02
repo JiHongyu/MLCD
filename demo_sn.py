@@ -8,7 +8,7 @@ import mnets
 
 path = '.\\result\\'
 # (n=100, k=30, maxk=50, mu=0.2, t1=2.5, on=5, om=3)
-input_cmd = mnets.lfr_cmd(n=200, k=6, maxk=20, mu=0.1, t1=2, on=4, om=2, minc=4, maxc=20)
+input_cmd = mnets.lfr_cmd(n=200, k=6, maxk=20, mu=0.1, t1=2, on=20, om=2, minc=4, maxc=20)
 # 生成测试网络
 print('生成测试网络数据')
 lfr_benchmark = mnets.lfr_mn_benchmark(input_cmd, num_of_layer=1)
@@ -25,7 +25,7 @@ lcd_algo.set_networks(networks)
 
 # 2. 设置相似性计算算法
 print('2. 设置相似性计算算法')
-lcd_algo.set_linkpair_simi_algo(mlcd.linkpair_simi_2)
+lcd_algo.set_linkpair_simi_algo(mlcd.linkpair_simi_1)
 
 # 3. 计算连边相似性
 print('3. 计算连边相似性')
@@ -34,7 +34,7 @@ dgram_info = lcd_algo.dendrogram.info
 
 # 4. 设置最优社团划算法
 print('4. 设置最优社团划算法')
-lcd_algo.set_objectfunc_algo(mlcd.objectfunc_by_max)
+lcd_algo.set_objectfunc_algo(mlcd.objectfunc_by_mean)
 
 # 5. 寻找最优社团
 print('5. 寻找最优社团')

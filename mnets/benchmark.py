@@ -89,6 +89,8 @@ def rewire_benchmark(g: nx.Graph, com2node: dict, node2com: dict):
     # rewiring links without destroying structure of the network
     random.seed(int(time.time()))
 
+    #com_cnt = {x:len(com2node[x])/4 for x in com2node.keys()}
+    com_cnt = {x: 10 for x in com2node.keys()}
     # rewire inner links
     rand_nodes = g.nodes()
     random.shuffle(rand_nodes)
@@ -98,6 +100,11 @@ def rewire_benchmark(g: nx.Graph, com2node: dict, node2com: dict):
         in_coms = node2com[x1]
         # 随机选择其中一个社团
         com = random.choice(in_coms)
+
+        if com_cnt[com] < 1:
+            continue
+        else:
+            com_cnt[com] -= 1
 
         # 选择与 x1 相邻的社团内节点 x2，构成边 x1--x2
         _t = list(set(g.neighbors(x1)) & set(com2node[com]))
@@ -115,13 +122,9 @@ def rewire_benchmark(g: nx.Graph, com2node: dict, node2com: dict):
         # 交换边对节点 x1--x2, y1--y2
         _t = list({x1, x2, y1, y2})
 
-        if len(_t) == 3:
-            random.shuffle(_t)
+        if len(_t) == 4 and x1 not in g.neighbors(y2) and x2 not in g.neighbors(y1):
             g.remove_edges_from([(x1, x2), (y1, y2)])
-            g.add_edges_from([(_t[0], _t[1]), (_t[1], _t[2])])
-        elif len(_t) == 4:
-            g.remove_edges_from([(x1, x2), (y1, y2)])
-            g.add_edges_from([(x1, y1), (x2, y2)])
+            g.add_edges_from([(x1, y2), (x2, y1)])
         else:
             pass
 
@@ -148,12 +151,19 @@ def rewire_benchmark(g: nx.Graph, com2node: dict, node2com: dict):
             continue
         y2 = random.choice(_t)
 
-        # 交换边对节点 x1--x2, y1--y2
+        _c = random.randint(0,1)
+
+
         if x1 is not y1:
             g.remove_edges_from([(x1, x2), (y1, y2)])
-            g.add_edges_from([(x1, y2), (x2, y1)])
-        else:
-            pass
+            if _c == 0:
+                # 交换边对节点 x1--x2, y1--y2
+                g.add_edges_from([(x1, y2), (x2, y1)])
+            else:
+                g.add_nodes_from([x1, x2, y1, y2])
+
+
+
 
 def lfr_mn_benchmark(command:str, num_of_layer:int):
 
@@ -180,9 +190,6 @@ def gn_mn_benchmark(num_of_layer: int, mu:float= 0.1):
 
     return lfr_mn_benchmark(gn_cmd(mu), num_of_layer)
 
-__all__ = ['lfr_cmd', 'gn_cmd',
-           'lfr_sn_benchmark', 'lfr_mn_benchmark',
-           'gn_sn_benchmark', 'gn_mn_benchmark']
 
 if __name__ == '__main__':
     pass

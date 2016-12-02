@@ -13,7 +13,14 @@ def objectfunc_by_mean(networks, link_coms, node_coms):
     num_of_net = len(networks)
     for link_com, node_com in zip(link_coms, node_coms):
 
-        cur_com = len(link_com)
+        # 计算社团在每一层的最大边数
+        cur_com = 0
+        for g in networks:
+            for link in link_com:
+                n1, n2 = link.node()
+                if n2 in g.neighbors(n1):
+                    cur_com += 1
+
 
         min_com = (len(node_com)-1)*num_of_net
         max_com = 0.5 * len(node_com) * (len(node_com) - 1)*num_of_net

@@ -1,5 +1,5 @@
 import functools
-
+import pickle
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -12,22 +12,22 @@ simi_algo = functools.partial(mlcd.linkpair_simi_2, alpha=0.5)
 
 def process_algorithm(lcd_algo, layer_num):
 
-    input_cmd = mnets.lfr_cmd(n=200, k=6, maxk=20, mu=mu, t1=2, on=4, om=2, minc=4, maxc=20)
+    input_cmd = mnets.lfr_cmd(n=200, k=6, maxk=20, mu=mu, t1=2, on=20, om=2, minc=4, maxc=20)
 
     lfr_benchmark = mnets.lfr_mn_benchmark(input_cmd, num_of_layer=layer_num)
     networks = lfr_benchmark['networks']
     lcd_algo.set_networks(networks)
 
-    # ÉèÖÃÏàËÆ¼ÆËãº¯Êı£¬²¢¼ÆËãÁ¬±ßÏàËÆĞÔ
+    # è®¾ç½®ç›¸ä¼¼è®¡ç®—å‡½æ•°ï¼Œå¹¶è®¡ç®—è¿è¾¹ç›¸ä¼¼æ€§
     lcd_algo.set_linkpair_simi_algo(simi_algo)
     lcd_algo.cal_linkpair_similarity()
 
-    # ÏµÍ³Ê÷ĞÅÏ¢
+    # ç³»ç»Ÿæ ‘ä¿¡æ¯
     degram_info = lcd_algo.dendrogram.info
 
     qd = degram_info['pair_redu']/degram_info['pair_used']
-    # ÉèÖÃ×îÓĞÄ¿±êº¯Êı£¬²¢¼ÆËã×îÓÅÉçÍÅ
-    lcd_algo.set_objectfunc_algo(mlcd.objectfunc_by_max)
+    # è®¾ç½®æœ€æœ‰ç›®æ ‡å‡½æ•°ï¼Œå¹¶è®¡ç®—æœ€ä¼˜ç¤¾å›¢
+    lcd_algo.set_objectfunc_algo(mlcd.objectfunc_by_mean)
     result = lcd_algo.cal_optimization_community()
 
     cor_node_coms, qoc = mlcd.preprocess_node_community(result['node_coms'], lcd_algo.node_set)
@@ -35,11 +35,11 @@ def process_algorithm(lcd_algo, layer_num):
 
     return nmi, qoc, qd
 
-repeat_num = 10
+repeat_num = 25
 
 lcd_algo = mlcd.MNetworkLCD()
 
-layer_num_seq = [1, 3, 5, 7 , 11, 13]
+layer_num_seq = [1, 2, 3, 4, 5, 6]
 keys = ['L_%s' % l for l in layer_num_seq]
 
 
@@ -51,7 +51,7 @@ for r in range(repeat_num):
 
     for layer_num in layer_num_seq:
 
-        print('+++++++++ µÚ%3d/%3d´Î²âÊÔ£¬²ÎÊı layer=%3d ++++++++' % (r + 1, repeat_num, layer_num))
+        print('+++++++++ ç¬¬%3d/%3dæ¬¡æµ‹è¯•ï¼Œå‚æ•° layer=%3d ++++++++' % (r + 1, repeat_num, layer_num))
 
         nmi, qoc, qd = process_algorithm(lcd_algo, layer_num)
 
@@ -60,3 +60,5 @@ for r in range(repeat_num):
 col_name = ('layer', 's', 'mu', 'nmi', 'qoc', 'qd')
 
 df_res = pd.DataFrame(data=df_data, columns=col_name)
+
+pickle.dump(df_res, open('layer_df.dump', 'wb'))

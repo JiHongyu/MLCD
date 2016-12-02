@@ -1,5 +1,5 @@
 import functools
-
+import pickle
 import matplotlib.pyplot as plt
 import matplotlib
 import pandas as pd
@@ -59,18 +59,16 @@ for r in range(repeat_num):
         for s1_a in s1_alpha_seq:
             simi_algo_1 = functools.partial(mlcd.linkpair_simi_1, alpha=s1_a)
             nmi, qoc, qd = process_algorithm(lcd_algo, simi_algo_1)
-            df_data.append((num_of_layer, 's1_%.2f'%s1_a, mu, nmi, qoc, qd))
+            df_data.append((num_of_layer, mu, 's1', s1_a, nmi, qoc, qd))
 
         for s2_a in s2_alpha_seq:
             simi_algo_2 = functools.partial(mlcd.linkpair_simi_2, alpha=s2_a)
             nmi, qoc, qd = process_algorithm(lcd_algo, simi_algo_2)
-            df_data.append((num_of_layer, 's2_%.2f'%s2_a, mu, nmi, qoc, qd))
+            df_data.append((num_of_layer, mu, 's2', s2_a, nmi, qoc, qd))
 
-col_name = ('layer', 's', 'mu', 'nmi', 'qoc', 'qd')
+col_name = ('layer', 'mu', 's', 'alpha', 'nmi', 'qoc', 'qd')
 
 
 df_res = pd.DataFrame(data=df_data, columns=col_name)
 
-matplotlib.style.use('ggplot')
-
-
+pickle.dump(df_res, open('simi_df.dump','wb'))
