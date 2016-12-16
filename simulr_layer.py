@@ -7,12 +7,12 @@ import numpy as np
 import mlcd
 import mnets
 
-mu = 0.1
+mu = 0.05
 simi_algo = functools.partial(mlcd.linkpair_simi_2, alpha=0.5)
 
 def process_algorithm(lcd_algo, layer_num):
 
-    input_cmd = mnets.lfr_cmd(n=200, k=6, maxk=20, mu=mu, t1=2, on=20, om=2, minc=4, maxc=20)
+    input_cmd = mnets.lfr_cmd(n=800, k=20, maxk=50, mu=mu, t1=2, on=40, om=2, minc=10, maxc=50)
 
     lfr_benchmark = mnets.lfr_mn_benchmark(input_cmd, num_of_layer=layer_num)
     networks = lfr_benchmark['networks']
@@ -35,7 +35,7 @@ def process_algorithm(lcd_algo, layer_num):
 
     return nmi, qoc, qd
 
-repeat_num = 25
+repeat_num = 40
 
 lcd_algo = mlcd.MNetworkLCD()
 
@@ -45,6 +45,7 @@ keys = ['L_%s' % l for l in layer_num_seq]
 
 df_data = []
 
+error_num = 0
 
 for r in range(repeat_num):
 
@@ -53,9 +54,14 @@ for r in range(repeat_num):
 
         print('+++++++++ 第%3d/%3d次测试，参数 layer=%3d ++++++++' % (r + 1, repeat_num, layer_num))
 
-        nmi, qoc, qd = process_algorithm(lcd_algo, layer_num)
+        try:
+            nmi, qoc, qd = process_algorithm(lcd_algo, layer_num)
 
-        df_data.append((layer_num, 's2', mu, nmi, qoc, qd))
+            df_data.append((layer_num, 's2', mu, nmi, qoc, qd))
+        except:
+            print('There is a error')
+            error_num += 1
+            continue
 
 col_name = ('layer', 's', 'mu', 'nmi', 'qoc', 'qd')
 

@@ -40,13 +40,22 @@ class MNetwork:
 
         _linkpair = set()  # {(a,b,c)...}
         for src, dst in self.project_nets.edges():
+            
             for src_neighbors in self.project_nets.neighbors(src):
-                if src_neighbors != dst:
+                if src_neighbors < dst:
                     _linkpair.add((src_neighbors, src, dst,))
+                elif src_neighbors > dst:
+                    _linkpair.add((dst, src, src_neighbors,))
+                else:
+                    pass
 
             for dst_neighbors in self.project_nets.neighbors(dst):
-                if dst_neighbors != src:
+                if dst_neighbors < src:
+                    _linkpair.add((dst_neighbors, dst, src,))
+                elif dst_neighbors > src:
                     _linkpair.add((src, dst, dst_neighbors,))
+                else:
+                    pass
 
         return list(_linkpair)
 

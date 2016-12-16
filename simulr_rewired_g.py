@@ -8,7 +8,7 @@ import mnets
 
 path = '.\\result\\'
 # (n=100, k=30, maxk=50, mu=0.2, t1=2.5, on=5, om=3)
-input_cmd = mnets.lfr_cmd(n=200, k=6, maxk=20, mu=0.1, t1=2, on=4, om=2, minc=4, maxc=20)
+input_cmd = mnets.lfr_cmd(n=1000, k=20, maxk=50, mu=0.1, t1=2, on=50, om=2, minc=10, maxc=50)
 
 
 ori_lfr = mnets.lfr_sn_benchmark(input_cmd)

@@ -151,7 +151,7 @@ def rewire_benchmark(g: nx.Graph, com2node: dict, node2com: dict):
             continue
         y2 = random.choice(_t)
 
-        _c = random.randint(0,1)
+        _c = 0# random.randint(0,1)
 
 
         if x1 is not y1:
