@@ -6,6 +6,16 @@
 # link_coms：边社团
 # node_coms：点社团
 
+def cuting_density(node_coms_num, link_coms_num, layer_num):
+    min_com = node_coms_num - 1
+    max_com = 0.5 * node_coms_num * (node_coms_num - 1)
+
+    density = (link_coms_num - min_com) / (max_com - min_com) \
+        if abs(max_com - min_com) > 0.0001 else 0
+
+    return density
+
+
 def objectfunc_by_mean(networks, link_coms, node_coms):
 
     cur_f = 0

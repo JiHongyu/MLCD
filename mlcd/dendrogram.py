@@ -3,23 +3,75 @@ from .edge import Edge
 class TreeNode:
     Cnt = 0
 
-    def __init__(self, info="node", simi=0.0, parent=None):
-        self.parent = parent
+    def __init__(self, info="node", parent=None):
+        # 节点信息
         self.info = info
-        self.children = []
-        self.depth = 0
-        self.simi = simi
-
-        TreeNode.Cnt += 1
-
-    def add_child(self, child):
-        self.children.append(child)
-
-    def add_children(self, children):
-        self.children.extend(children)
-
-    def set_parent(self, parent):
+        # 父节点
         self.parent = parent
+        # 子节点集
+        self.children = []
+        # 节点深度
+        self.depth = 0
+        # 节点关联相似度
+        self.simi = 0.0
+        # 节点编号
+        self.cnt = TreeNode.Cnt
+        # 节点计数
+        TreeNode.Cnt += 1
+        # 子树叶子节点集
+        self.leaves = set()
+
+        if isinstance(info, Edge):
+            self.leaves.add(info)
+            self.simi = 1.0
+
+
+
+    def merge_subtree(self, tree):
+
+
+        self.children.extend(tree.children)
+
+        self.leaves.update(tree.leaves)
+
+        pass
+
+    @classmethod
+    def merge_tree(cls, tree1, tree2, simi):
+
+        new_node = TreeNode(info="inner")
+
+        new_node.children.append(tree1)
+        new_node.children.append(tree2)
+
+        tree1.parent = new_node
+        tree2.parent = new_node
+
+        new_node.leaves.update(tree1.leaves)
+        new_node.leaves.update(tree2.leaves)
+
+        new_node.depth = max(tree1.depth, tree2.depth) + 1
+        new_node.simi = simi
+        return new_node
+
+    @classmethod
+    def merge_trees(cls, trees, simi):
+
+        new_node = TreeNode(info="inner")
+
+        for tree in trees:
+            new_node.children.append(tree)
+
+            tree.parent = new_node
+
+            new_node.leaves.update(tree.leaves)
+
+            new_node.depth = max(tree.depth+1, new_node.depth)
+        new_node.simi = simi
+        return new_node
+
+    def __hash__(self):
+        return self.cnt
 
 
 class Dendrogram:
@@ -34,14 +86,12 @@ class Dendrogram:
         self.__node_pairs_data = node_pairs_data
         self.__node_set = node_set
 
-        # 保存系统树的所有子树的叶子集合，用于快速查找
-        self.__leaves_info = dict()
-
         self.__pair_used = 0
         self.__pair_redu = 0
 
         # 系统树根节点
         self.__root = self.__generate_tree()
+
 
 
 
@@ -51,11 +101,11 @@ class Dendrogram:
         :return: 返回系统树图的根节点
         """
 
+        eps = 0.0001
         # 初始迭代森林 [(TreeNode,(nodes..),...]
-        forest = [(TreeNode(n, 1.0), {n}) for n in self.__node_set]
+        leave2tree = {n:TreeNode(n) for n in self.__node_set}
 
-        for tree in forest:
-            self.__leaves_info[tree[0]] = tuple(tree[1])
+        forest = [(TreeNode(n, 1.0), {n}) for n in self.__node_set]
 
         for n1, n2, simi in self.__node_pairs_data:
             if abs(simi) < 0.0001 or len(forest) is 1:
@@ -65,68 +115,50 @@ class Dendrogram:
             self.__pair_used += 1
 
             # 计算节点 n1和n2 所属的子树
-            tree1 = Dendrogram.__find_tree(forest, n1)
-            tree2 = Dendrogram.__find_tree(forest, n2)
+            tree1 = leave2tree[n1]
+            tree2 = leave2tree[n2]
             if tree1 is tree2:
                 self.__pair_redu += 1
                 continue
 
-            if abs(tree1[0].simi - tree2[0].simi) < 0.00001 and (
-                    tree1[0].info == 'inner' or tree2[0].info == 'inner'):
+            if abs(tree1.simi - simi) < eps \
+                    and (tree1.simi - tree2.simi) < eps \
+                    and (tree1.info == 'inner' or tree2.info == 'inner'):
                 # 两棵树相似性相同，可以直接将两棵子树的孩子合并
 
-                # 确定子树谁去谁留，作为叶节点的平凡子树是不能被移除的
-                if tree1[0].info == 'inner':
+                # 确定子树谁去谁留，作为叶节点的平凡子树需要移除的
+                if tree1.info == 'inner':
                     remain_tree, left_tree = tree1, tree2
                 else:
                     remain_tree, left_tree = tree2, tree1
 
-                remain_tree[0].add_children(left_tree[0].children)
-                remain_tree[1].update(left_tree[1])
+                remain_tree.merge_subtree(left_tree)
 
-                self.__leaves_info[remain_tree[0]] = tuple(remain_tree[1])
-                self.__leaves_info.pop(left_tree[0])
-
-                forest.remove(left_tree)
+                for leaf in left_tree.leaves:
+                    leave2tree[leaf] = remain_tree
 
             else:
                 # 两棵树相似性不同，需要添加新的节点进行融合
-                new_tree_node = TreeNode(info="inner", simi=simi, parent=None)
+                new_tree = TreeNode.merge_tree(tree1, tree2, simi)
 
-                new_tree_node.add_child(tree1[0])
-                new_tree_node.add_child(tree2[0])
+                for leaf in tree1.leaves:
+                    leave2tree[leaf] = new_tree
 
-                new_tree_node.depth = max(tree1[0].depth, tree2[0].depth) + 1
-                tree1[0].set_parent(new_tree_node)
-                tree2[0].set_parent(new_tree_node)
+                for leaf in tree2.leaves:
+                    leave2tree[leaf] = new_tree
 
-                new_nodes = tree1[1].union(tree2[1])
+        rest_trees = tuple(set(leave2tree.values()))
 
-                forest.remove(tree1)
-                forest.remove(tree2)
-                forest.append((new_tree_node, new_nodes,))
-                self.__leaves_info[new_tree_node] = tuple(new_nodes)
-
-
-
-        if len(forest) is 1:
-
-            forest[0][0].info = "root"
-            return forest[0][0]
+        if len(rest_trees) == 1:
+            root = rest_trees[0]
         else:
+            root = TreeNode.merge_trees(rest_trees, 0)
 
-            # 不联通的情况
-            new_tree_node = TreeNode(info="root", simi=0.0, parent=None)
-            new_nodes = set()
-            depth_max = 0
-            for node in forest:
-                new_tree_node.add_child(node[0])
-                node[0].set_parent(new_tree_node)
-                depth_max = max(depth_max, node[0].depth)
-                new_nodes.update(node[1])
-            new_tree_node.depth = depth_max + 1
-            self.__leaves_info[new_tree_node] = tuple(new_nodes)
-            return new_tree_node
+        root.info = 'root'
+        return root
+
+
+
 
     def __serialize(self, tree):
         if len(tree.children) is 0:
@@ -148,17 +180,11 @@ class Dendrogram:
         covers = []
         for tree in subtrees:
             # 每一个社团
-            one_com = self.__leaves_info[tree]
+            one_com = tree.leaves
             if len(one_com) >= least_com_num:
                 covers.append(tuple(one_com))
         return covers
 
-    @classmethod
-    def __find_tree(cls, forest, node):
-        for tree in reversed(forest):
-            if node in tree[1]:
-                return tree
-        return None
 
     @classmethod
     def __cut_tree(cls, tree, cut_simi):

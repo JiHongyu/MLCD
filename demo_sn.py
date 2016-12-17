@@ -8,7 +8,7 @@ import mnets
 
 path = '.\\result\\'
 # (n=100, k=30, maxk=50, mu=0.2, t1=2.5, on=5, om=3)
-input_cmd = mnets.lfr_cmd(n=800, k=20, maxk=50, mu=0, t1=2, on=50, om=2, minc=10, maxc=50)
+input_cmd = mnets.lfr_cmd(n=1000, k=20, maxk=50, mu=0.05, t1=2, on=40, om=2, minc=10, maxc=50)
 # 生成测试网络
 print('生成测试网络数据')
 lfr_benchmark = mnets.lfr_mn_benchmark(input_cmd, num_of_layer=1)
@@ -59,7 +59,7 @@ redu_r = dgram_info['pair_redu']/dgram_info['pair_used']
 print('NMI : %.4f'%nmi)
 print('Redu: %.4f'%redu_r)
 
-pickle.dump(lcd_algo, open(path + 'mcld_algo.pickle', 'wb'))
+#pickle.dump(lcd_algo, open(path + 'mcld_algo.pickle', 'wb'))
 
 plt.plot(result['curve'])
 plt.show()
