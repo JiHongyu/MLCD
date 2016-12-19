@@ -15,7 +15,6 @@ def cuting_density(node_coms_num, link_coms_num, layer_num):
 
     return density
 
-
 def objectfunc_by_mean(networks, link_coms, node_coms):
 
     cur_f = 0

@@ -53,19 +53,18 @@ def linkpair_simi_2(networks, src, mid, dst, alpha: float = 0.5):
 
     num_of_nets = len(networks)
 
-    for g1, g2 in itertools.product(networks, networks):
+    # 同层计算
+    for g1 in networks:
+        inlayer_numerator += len(set(g1.neighbors(src)) & set(g1.neighbors(dst)))
+        inlayer_denumerator += np.sqrt(len(g1.neighbors(src)) * len(g1.neighbors(dst)))
 
-        if mid not in g1.nodes() or mid not in g2.nodes():
-            continue
-
-        if src in g1.neighbors(mid) and dst in g2.neighbors(mid):
-
-            if g1 == g2:
-                inlayer_numerator += len(set(g1.neighbors(src)) & set(g2.neighbors(dst)))
-                inlayer_denumerator += np.sqrt(len(g1.neighbors(src)) * len(g2.neighbors(dst)))
-            else:
-                crslayer_numerator += len(set(g1.neighbors(src)) & set(g2.neighbors(dst)))
-                crslayer_denumerator += np.sqrt(len(g1.neighbors(src)) * len(g2.neighbors(dst)))
+    # 跨层计算
+    for x in range(num_of_nets-1):
+        g1 = networks[x]
+        for y in networks[x+1:]:
+            g2 = networks[y]
+            crslayer_numerator += len(set(g1.neighbors(src)) & set(g2.neighbors(dst)))
+            crslayer_denumerator += np.sqrt(len(g1.neighbors(src)) * len(g2.neighbors(dst)))
 
     if num_of_nets != 1:
         simi_num = inlayer_numerator + 2 * alpha * crslayer_numerator / (num_of_nets - 1)

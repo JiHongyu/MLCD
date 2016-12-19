@@ -25,7 +25,7 @@ lcd_algo.set_networks(networks)
 
 # 2. 设置相似性计算算法
 print('2. 设置相似性计算算法')
-lcd_algo.set_linkpair_simi_algo(mlcd.linkpair_simi_1)
+lcd_algo.set_linkpair_simi_algo(mlcd.linkpair_simi_2)
 
 # 3. 计算连边相似性
 print('3. 计算连边相似性')
