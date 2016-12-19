@@ -32,6 +32,9 @@ class TreeNode:
 
         self.children.extend(tree.children)
 
+        for child in tree.children:
+            child.parent = self
+
         self.leaves.update(tree.leaves)
 
         pass
@@ -39,20 +42,7 @@ class TreeNode:
     @classmethod
     def merge_tree(cls, tree1, tree2, simi):
 
-        new_node = TreeNode(info="inner")
-
-        new_node.children.append(tree1)
-        new_node.children.append(tree2)
-
-        tree1.parent = new_node
-        tree2.parent = new_node
-
-        new_node.leaves.update(tree1.leaves)
-        new_node.leaves.update(tree2.leaves)
-
-        new_node.depth = max(tree1.depth, tree2.depth) + 1
-        new_node.simi = simi
-        return new_node
+        return cls.merge_trees((tree1,tree2,), simi)
 
     @classmethod
     def merge_trees(cls, trees, simi):
@@ -89,6 +79,8 @@ class Dendrogram:
         self.__pair_used = 0
         self.__pair_redu = 0
 
+        self.__inner = 0
+        self.__inner_abd = 0
         # 系统树根节点
         self.__root = self.__generate_tree()
 
@@ -121,8 +113,7 @@ class Dendrogram:
                 self.__pair_redu += 1
                 continue
 
-            if abs(tree1.simi - simi) < eps \
-                    and (tree1.simi - tree2.simi) < eps \
+            if abs(2*simi - tree1.simi - tree2.simi) < 2*eps \
                     and (tree1.info == 'inner' or tree2.info == 'inner'):
                 # 两棵树相似性相同，可以直接将两棵子树的孩子合并
 
@@ -139,6 +130,8 @@ class Dendrogram:
 
             else:
                 # 两棵树相似性不同，需要添加新的节点进行融合
+
+                self.__inner += 1
                 new_tree = TreeNode.merge_tree(tree1, tree2, simi)
 
                 for leaf in tree1.leaves:
@@ -152,8 +145,10 @@ class Dendrogram:
         if len(rest_trees) == 1:
             root = rest_trees[0]
         else:
+            self.__inner += 1
             root = TreeNode.merge_trees(rest_trees, 0)
 
+        self.__inner_abd  = len(self.__node_set) - self.__inner - 1
         root.info = 'root'
         return root
 
@@ -172,7 +167,7 @@ class Dendrogram:
     def serialize(self, tree=None):
         return self.__serialize(tree=self.__root)
 
-    def generate_community(self, cut_simi=0.0, least_com_num=0):
+    def generate_community(self, cut_simi, least_com_num):
 
         # 系统树划分
         subtrees = Dendrogram.__cut_tree(self.__root, cut_simi)
@@ -228,6 +223,8 @@ class Dendrogram:
         d['pair_num'] = len(self.__node_pairs_data)
         d['pair_used'] = self.__pair_used
         d['pair_redu'] = self.__pair_redu
+        d['inner_num'] = self.__inner
+        d['inner_abd_num'] = self.__inner_abd
         d['simi_min'] = self.__node_pairs_data[self.__pair_used-1][2]
         d['simi_max'] = self.__node_pairs_data[0][2]
         return d

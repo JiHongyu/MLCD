@@ -8,7 +8,7 @@ import mnets
 
 path = '.\\result\\'
 # (n=100, k=30, maxk=50, mu=0.2, t1=2.5, on=5, om=3)
-input_cmd = mnets.lfr_cmd(n=1000, k=20, maxk=50, mu=0.05, t1=2, on=40, om=2, minc=10, maxc=50)
+input_cmd = mnets.lfr_cmd(n=200, k=10, maxk=30, mu=0.0, t1=2, on=20, om=2, minc=5, maxc=40)
 # 生成测试网络
 print('生成测试网络数据')
 lfr_benchmark = mnets.lfr_mn_benchmark(input_cmd, num_of_layer=1)

@@ -40,7 +40,7 @@ def objectfunc_by_mean(networks, link_coms, node_coms):
         cur_f += cur_com * density
         all_link_num += cur_com
 
-    return cur_f/all_link_num
+    return cur_f/all_link_num if all_link_num is not 0 else -1
 
 def objectfunc_by_max(networks, link_coms, node_coms):
     cur_f = 0

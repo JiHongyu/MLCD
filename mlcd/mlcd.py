@@ -72,7 +72,7 @@ class MNetworkLCD:
 
         for cut_simi in iterable:
 
-            link_coms = self.dendrogram.generate_community(cut_simi=cut_simi, least_com_num=1)
+            link_coms = self.dendrogram.generate_community(cut_simi=cut_simi, least_com_num=2)
             node_coms = convert_link2node_community(link_coms)
             cur_f = self.mnetworks.objectfunc(link_coms, node_coms)
 
