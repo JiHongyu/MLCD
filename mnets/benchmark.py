@@ -61,7 +61,7 @@ def process_original_lfr_data(name='L1'):
     d['network'] = g
     d['com2node'] = com2node
     d['node2com'] = node2com
-
+    d['nodes'] = tuple(node2com.keys())
     return d
 
 def lfr_sn_benchmark(command:str, is_new=True):

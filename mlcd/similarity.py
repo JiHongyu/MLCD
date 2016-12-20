@@ -61,8 +61,7 @@ def linkpair_simi_2(networks, src, mid, dst, alpha: float = 0.5):
     # 跨层计算
     for x in range(num_of_nets-1):
         g1 = networks[x]
-        for y in networks[x+1:]:
-            g2 = networks[y]
+        for g2 in networks[x+1:]:
             crslayer_numerator += len(set(g1.neighbors(src)) & set(g2.neighbors(dst)))
             crslayer_denumerator += np.sqrt(len(g1.neighbors(src)) * len(g2.neighbors(dst)))
 

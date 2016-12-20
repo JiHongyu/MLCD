@@ -5,7 +5,9 @@
     <file url="file://$PROJECT_DIR$/.gitignore" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/demo_mn.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/demo_sn.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mnets/file.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/simulation.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/simulr_algo_cmp.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/simulr_layer.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/simulr_similarity.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/test.py" charset="UTF-8" />

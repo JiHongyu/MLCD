@@ -1,4 +1,6 @@
 import time
+import itertools
+
 import networkx as nx
 import mlcd
 def save_networks_container(networks,path:str,name=None):
@@ -60,3 +62,5 @@ def save_mn_benchmark(benchmark, path:str,name=None, link_coms=None, node_coms=N
 
         nx.write_gml(g, '%s_layer_%s.gml' % (path + name, _layer), stringizer=lambda x: str(x) if not isinstance(x, str) else x)
         _layer += 1
+__all__ = ['save_sn_benchmark', 'save_mn_benchmark']
+

@@ -4,11 +4,11 @@ import matplotlib.pyplot as plt
 
 import mlcd
 import mnets
-
+from validation import *
 
 path = '.\\result\\'
 # (n=100, k=30, maxk=50, mu=0.2, t1=2.5, on=5, om=3)
-input_cmd = mnets.lfr_cmd(n=200, k=10, maxk=30, mu=0.0, t1=2, on=20, om=2, minc=5, maxc=40)
+input_cmd = mnets.lfr_cmd(n=400, k=12, maxk=30, mu=0, t1=2, on=40, om=2, minc=6, maxc=30)
 # 生成测试网络
 print('生成测试网络数据')
 lfr_benchmark = mnets.lfr_mn_benchmark(input_cmd, num_of_layer=1)
@@ -51,8 +51,8 @@ mnets.save_mn_benchmark(lfr_benchmark, path=path, link_coms=result['link_coms'])
 # 8. 计算 Normalized mutual information
 print('8. 计算 Normalized mutual information')
 
-cor_node_coms, _ = mlcd.preprocess_node_community(result['node_coms'], lcd_algo.node_set)
-nmi = mlcd.mni_olp_1(cor_node_coms, lfr_benchmark['com2node'].values())
+cor_node_coms, _ = preprocess_node_community(result['node_coms'], lcd_algo.node_set)
+nmi = mni_olp_1(cor_node_coms, lfr_benchmark['com2node'].values())
 
 
 redu_r = dgram_info['pair_redu']/dgram_info['pair_used']

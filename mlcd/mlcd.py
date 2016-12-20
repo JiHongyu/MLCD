@@ -14,22 +14,6 @@ def convert_link2node_community(link_coms):
         node_coms.append(tuple(com_node_set))
     return node_coms
 
-def preprocess_node_community(node_coms, nodes):
-
-    fixed_node_coms = []
-    fixed_nodes = set()
-
-    for com in node_coms:
-        if len(com) > 2:
-            fixed_nodes.update(com)
-            fixed_node_coms.append(com)
-
-    diff_nodes = nodes - fixed_nodes
-
-    for link in diff_nodes:
-        fixed_node_coms.append((link,))
-
-    return fixed_node_coms, 1-len(diff_nodes)/len(nodes)
 
 #################################################
 # 多网络连边检测算法主体

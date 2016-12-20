@@ -115,6 +115,25 @@ def mni_olp_1(coms1, coms2, num = 0):
     return 1 - (h_x_by_y + h_y_by_x)/2
 
 
+def preprocess_node_community(node_coms, nodes):
+
+    fixed_node_coms = []
+    fixed_nodes = set()
+
+    for com in node_coms:
+        if len(com) > 2:
+            fixed_nodes.update(com)
+            fixed_node_coms.append(com)
+
+    if isinstance(nodes, set):
+        diff_nodes = nodes - fixed_nodes
+    else:
+        diff_nodes = set(nodes) - fixed_nodes
+
+    for n in diff_nodes:
+        fixed_node_coms.append((n,))
+
+    return fixed_node_coms, 1-len(diff_nodes)/len(nodes)
 
 # 包导入控制
-__all__ = ['nmi_non_olp','mni_olp_1']
+__all__ = ['nmi_non_olp', 'mni_olp_1', 'preprocess_node_community']
