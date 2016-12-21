@@ -1,6 +1,7 @@
 .idea/
 mlcd/__pycache__/
 mnets/__pycache__/
+algos/__pycache__/
 temp/
 result/
 recoord/
