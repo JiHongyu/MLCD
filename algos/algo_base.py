@@ -4,7 +4,7 @@ class Algorithm:
         self.networks = networks
         self.r = {'node_coms':[], 'link_coms':[]}
 
-    def run_algo(self):
+    def run_algo(self, *args, **kwargs):
         return self.r
 
     @property

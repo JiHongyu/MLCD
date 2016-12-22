@@ -19,8 +19,8 @@ class Infomap(Algorithm):
         # 建立节点索引
         self.nodes = networks[0].nodes()
         num_of_nodes = len(self.nodes)
-        self.node_idx = {x:x for x in self.nodes}
-
+        self.node_idx = {x: x+1 for x in self.nodes}
+        self.node_ridx = {x+1: x for x in self.nodes}
         if path is None:
             self.path = ''
         else:
@@ -56,8 +56,8 @@ class Infomap(Algorithm):
         for net in networks:
             layer = self.net_idx[net]
             for n1, n2 in net.edges():
-                context.append(s % (layer, n1, layer, n2))
-                context.append(s % (layer, n2, layer, n1))
+                context.append(s % (layer, self.node_idx[n1], layer, self.node_idx[n2]))
+                context.append(s % (layer, self.node_idx[n2], layer, self.node_idx[n1]))
 
         # 2.2 构建跨层网络信息
         for net1, net2 in itertools.product(networks, networks):
@@ -67,8 +67,8 @@ class Infomap(Algorithm):
             l1 = self.net_idx[net1]
             l2 = self.net_idx[net2]
             for n in self.nodes:
-                context.append(s % (l1, n, l2, n))
-                context.append(s % (l2, n, l1, n))
+                context.append(s % (l1, self.node_idx[n], l2, self.node_idx[n]))
+                context.append(s % (l2, self.node_idx[n], l1, self.node_idx[n]))
 
         #  写入文件
         path = '%s%s.net'%(self.path,self.name)
@@ -77,7 +77,7 @@ class Infomap(Algorithm):
 
     def __run_exec_file(self, paras):
 
-        infomap_cmd = ' Infomap %s %s%s.net %s -i multiplex' % \
+        infomap_cmd = 'Infomap %s %s%s.net %s -i multiplex' % \
                    (paras, self.path, self.name, self.path)
         os.system(infomap_cmd)
 
@@ -93,8 +93,8 @@ class Infomap(Algorithm):
                 if line.startswith('#'):
                     continue
                 data = line.split()
-                node2com[int(data[0])].append(int(data[1]))
-                com2node[int(data[1])].append(int(data[0]))
+                node2com[self.node_ridx[int(data[0])]].append(int(data[1]))
+                com2node[int(data[1])].append(self.node_ridx[int(data[0])])
 
         self.r['node_coms'] = tuple(x for x in com2node.values())
         self.r['node2com'] = node2com

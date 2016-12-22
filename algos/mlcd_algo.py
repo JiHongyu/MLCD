@@ -6,7 +6,7 @@ class Mlcd(Algorithm):
     def __init__(self, networks):
         Algorithm.__init__(self, networks)
 
-    def run_algo(self):
+    def run_algo(self, *args, **kwargs):
         mlcd_algo = mlcd.MNetworkLCD()
 
         # 1. ÔØÈëÍøÂçÊı¾İ

@@ -1,2 +1,3 @@
-from .infomap import *
-from .mlcd import *
+from .infomap_algo import *
+from .mlcd_algo import *
+from .louvain_algo import *

@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 import mlcd
 import mnets
-
+from validation import *
 
 # gn :(n=128, k=16, maxk=16, mu=0.3, maxc=32, minc=32)
 # (n=100, k=30, maxk=50, mu=0.2, t1=2.5, on=5, om=3)
@@ -46,7 +46,7 @@ mnets.save_mn_benchmark(lfr_benchmark, '.\\result\\')
 
 # 8. 计算 Normalized mutual information
 print('8. 计算 Normalized mutual information')
-nmi = mlcd.mni_olp_1(result['node_coms'], lfr_benchmark['com2node'].values())
+nmi = mni_olp_1(result['node_coms'], lfr_benchmark['com2node'].values())
 print(nmi)
 
 plt.plot(result['curve'])

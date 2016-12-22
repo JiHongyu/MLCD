@@ -6,14 +6,14 @@ import matplotlib.pyplot as plt
 
 from validation import *
 
-repeat_num = 40
+repeat_num = 10
 
-algo_col = ['mlcd', 'oifp', 'ifp']
+algo_col = ['mlcd', 'oifp', 'ifp', 'M', 'CPM']
 
 data = []
 
 path = 'temp/'
-input_cmd = mnets.lfr_cmd(n=400, k=12, maxk=30, mu=0.1, t1=2, on=40, om=2, minc=6, maxc=30)
+input_cmd = mnets.lfr_cmd(n=500, k=20, maxk=30, mu=0, t1=2, on=25, om=2, minc=6, maxc=30)
 
 for x in range(repeat_num):
 
@@ -25,21 +25,27 @@ for x in range(repeat_num):
 
     mlcd = algos.Mlcd(networks)
     infomap = algos.Infomap(networks, path=path)
+    louvain = algos.Louvain(networks)
 
-    algorithms = (mlcd, infomap, infomap)
+    algorithms = ((mlcd, None, True),
+                  (infomap, '--overlapping --clu', False),
+                  (infomap, '--clu', False),
+                  (louvain, 'Modularity', False),
+                  (louvain, 'CPM', False))
 
     d = []
-    for a, s in zip(algorithms, range(len(algorithms))):
+    for a, p, opti in algorithms:
 
-        if s is 1:
-            r = a.run_algo('--overlapping --clu')
-        elif s is 2:
-            r = a.run_algo('--clu')
+        r = a.run_algo(p)
+
+        if opti is True:
+            opti_node_coms, qoc = preprocess_node_community(r['node_coms'], nodes)
         else:
-            r = a.run_algo()
+            opti_node_coms = r['node_coms']
 
-        cor_node_coms, qoc = preprocess_node_community(r['node_coms'], nodes)
-        nmi = mni_olp_1(cor_node_coms, lfr_benchmark['com2node'].values())
+        nmi = mni_olp_1(opti_node_coms,
+                        lfr_benchmark['com2node'].values(),
+                        len(nodes))
 
         d.append(nmi)
 
