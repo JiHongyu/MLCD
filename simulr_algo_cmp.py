@@ -6,14 +6,14 @@ import matplotlib.pyplot as plt
 
 from validation import *
 
-repeat_num = 10
+repeat_num = 50
 
 algo_col = ['mlcd', 'oifp', 'ifp', 'M', 'CPM']
 
 data = []
 
 path = 'temp/'
-input_cmd = mnets.lfr_cmd(n=500, k=20, maxk=30, mu=0, t1=2, on=25, om=2, minc=6, maxc=30)
+input_cmd = mnets.lfr_cmd(n=500, k=18, maxk=35, mu=0, t1=2, on=20, om=2, minc=6, maxc=30)
 
 for x in range(repeat_num):
 

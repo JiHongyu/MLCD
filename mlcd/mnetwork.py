@@ -1,5 +1,5 @@
 from functools import partial
-
+from itertools import product
 import networkx as nx
 from .edge import Edge
 
@@ -38,26 +38,33 @@ class MNetwork:
         """提取融合后的单网络中的所有具有公共邻居的边对
         """
 
-        _linkpair = set()  # {(a,b,c)...}
-        for src, dst in self.project_nets.edges():
-            
-            for src_neighbors in self.project_nets.neighbors(src):
-                if src_neighbors < dst:
-                    _linkpair.add((src_neighbors, src, dst,))
-                elif src_neighbors > dst:
-                    _linkpair.add((dst, src, src_neighbors,))
-                else:
-                    pass
+        # _linkpair = set()  # {(a,b,c)...}
+        # for src, dst in self.project_nets.edges():
+        #
+        #     for src_neighbors in self.project_nets.neighbors(src):
+        #         if src_neighbors < dst:
+        #             _linkpair.add((src_neighbors, src, dst,))
+        #         elif src_neighbors > dst:
+        #             _linkpair.add((dst, src, src_neighbors,))
+        #         else:
+        #             pass
+        #
+        #     for dst_neighbors in self.project_nets.neighbors(dst):
+        #         if dst_neighbors < src:
+        #             _linkpair.add((dst_neighbors, dst, src,))
+        #         elif dst_neighbors > src:
+        #             _linkpair.add((src, dst, dst_neighbors,))
+        #         else:
+        #             pass
 
-            for dst_neighbors in self.project_nets.neighbors(dst):
-                if dst_neighbors < src:
-                    _linkpair.add((dst_neighbors, dst, src,))
-                elif dst_neighbors > src:
-                    _linkpair.add((src, dst, dst_neighbors,))
-                else:
-                    pass
+        _linkpair = []
 
-        return list(_linkpair)
+        for mid in self.project_nets.nodes_iter():
+            neighbors = self.project_nets.neighbors(mid)
+            for x in range(len(neighbors)):
+                for y in range(x+1,len(neighbors)):
+                    _linkpair.append((neighbors[x], mid, neighbors[y]))
+        return _linkpair
 
     def link_similarity_table(self):
 
