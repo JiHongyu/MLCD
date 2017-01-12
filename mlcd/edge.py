@@ -23,8 +23,6 @@ class Edge:
     def __eq__(self, edge):
         if not isinstance(edge, Edge):
             return False
-        elif type(self.__n1) != type(edge.__n1) or type(self.__n2) != type(edge.__n2):
-            return False
         elif self.__n1 == edge.__n1 and self.__n2 == edge.__n2:
             return True
         else:
