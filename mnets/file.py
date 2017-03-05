@@ -62,5 +62,17 @@ def save_mn_benchmark(benchmark, path:str,name=None, link_coms=None, node_coms=N
 
         nx.write_gml(g, '%s_layer_%s.gml' % (path + name, _layer), stringizer=lambda x: str(x) if not isinstance(x, str) else x)
         _layer += 1
-__all__ = ['save_sn_benchmark', 'save_mn_benchmark']
 
+def save_sn_network(network, path:str,name=None, link_coms=None):
+
+    if name is None:
+        name = 'sn_network'
+    if not name.endswith('.gexf'):
+        name += '.gexf'
+    if link_coms is not None:
+        label = 0
+        for link_com in link_coms:
+            _attr = {edge.node(): str(label) for edge in link_com}
+            nx.set_edge_attributes(network, 'mlcd', _attr)
+            label += 1
+    nx.write_gexf(network, path + name)
