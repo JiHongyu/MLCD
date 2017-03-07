@@ -12,8 +12,9 @@ path = '.\\result\\'
 input_cmd = mnets.lfr_cmd(n=80, k=10, maxk=20, mu=0.00, t1=2, on=10, om=2, minc=5, maxc=20)
 # 生成测试网络
 print('生成测试网络数据')
-lfr_benchmark = pickle.load(open(r'./result/lcd_mlcd.pickle', 'rb'))
-
+lfr_benchmark = mnets.lfr_mn_benchmark(input_cmd, num_of_layer=1)
+# mnets.save_mn_benchmark(lfr_benchmark, path=path)
+pickle.dump(lfr_benchmark, open(r'./result/last.pickle', 'wb'))
 networks = lfr_benchmark['networks']
 
 # 多网络连边社团检测算法对象

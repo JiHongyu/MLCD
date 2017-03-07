@@ -19,7 +19,7 @@ for x in range(repeat_num):
 
     print('+++++++++ 第%3d/%3d次测试' % (x, repeat_num))
     # 生成 LFR 网络
-    lfr_benchmark = mnets.lfr_mn_benchmark(input_cmd, num_of_layer=4)
+    lfr_benchmark = mnets.lfr_mn_benchmark(input_cmd, num_of_layer=3)
     networks = lfr_benchmark['networks']
     nodes = lfr_benchmark['nodes']
 
@@ -27,6 +27,7 @@ for x in range(repeat_num):
     infomap = algos.Infomap(networks, path=path)
     louvain = algos.Louvain(networks)
 
+    # (algo_func, parameters, option)
     algorithms = ((mlcd, None, True),
                   (infomap, '--overlapping --clu', False),
                   (infomap, '--clu', False),

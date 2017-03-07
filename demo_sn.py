@@ -1,6 +1,7 @@
 import pickle
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 import mlcd
 import mnets
@@ -40,13 +41,13 @@ lcd_algo.set_objectfunc_algo(mlcd.objectfunc_by_mean)
 print('5. 寻找最优社团')
 result = lcd_algo.cal_optimization_community()
 
+delta_density = mlcd.community_fusion(None, result['link_coms'], result['node_coms'])
 # 6. 获取系统树图
 print('6. 获取系统树图')
 lcd_algo.dump_dendrogram(path=path)
 
 # 7. 生成 gml 文件
-print('7. 生成 gml 文件吧')
-mnets.save_mn_benchmark(lfr_benchmark, path=path, link_coms=result['link_coms'])
+print('7. 生成可视化文件吧')
 
 # 8. 计算 Normalized mutual information
 print('8. 计算 Normalized mutual information')
@@ -54,12 +55,14 @@ print('8. 计算 Normalized mutual information')
 cor_node_coms, _ = preprocess_node_community(result['node_coms'], lcd_algo.node_set)
 nmi = mni_olp_1(cor_node_coms, lfr_benchmark['com2node'].values())
 
-
-redu_r = dgram_info['pair_redu']/dgram_info['pair_used']
-print('NMI : %.4f'%nmi)
-print('Redu: %.4f'%redu_r)
-
-#pickle.dump(lcd_algo, open(path + 'mcld_algo.pickle', 'wb'))
+print('NMI : %.4f' % nmi)
 
 plt.plot(result['curve'])
+plt.show()
+
+d = np.zeros(len(delta_density)+1)
+d[0] = delta_density[0]
+for x in range(len(delta_density)):
+    d[x+1] = d[x] + delta_density[x]
+plt.plot(d)
 plt.show()
