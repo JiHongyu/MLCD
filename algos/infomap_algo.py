@@ -44,7 +44,7 @@ class Infomap(Algorithm):
         context = []
         context.append('*Vertices %s \n'%len(self.nodes))
         for n in self.nodes:
-            context.append( '%s \"%s\" \n'%(self.node_idx[n], n))
+            context.append('%s \"%s\" \n'%(self.node_idx[n], n))
 
         # 2. 构建网络信息
         context.append('*Multiplex \n' )

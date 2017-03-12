@@ -163,8 +163,6 @@ def rewire_benchmark(g: nx.Graph, com2node: dict, node2com: dict):
                 g.add_nodes_from([x1, x2, y1, y2])
 
 
-
-
 def lfr_mn_benchmark(command:str, num_of_layer:int):
 
     lfr = lfr_sn_benchmark(command)

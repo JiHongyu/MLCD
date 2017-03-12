@@ -9,7 +9,7 @@ from validation import *
 
 path = '.\\result\\'
 # (n=100, k=30, maxk=50, mu=0.2, t1=2.5, on=5, om=3)
-input_cmd = mnets.lfr_cmd(n=80, k=10, maxk=20, mu=0.00, t1=2, on=10, om=2, minc=5, maxc=20)
+input_cmd = mnets.lfr_cmd(n=1000, k=20, maxk=100, mu=0.00, t1=2, on=50, om=2, minc=20, maxc=100)
 # 生成测试网络
 print('生成测试网络数据')
 lfr_benchmark = pickle.load(open(r'./result/lcd_mlcd.pickle', 'rb'))

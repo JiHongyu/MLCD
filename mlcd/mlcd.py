@@ -2,7 +2,7 @@ import json
 
 from .mnetwork import MNetwork
 from .dendrogram import Dendrogram
-
+from .coms_fusion import *
 
 
 def convert_link2node_community(link_coms):
@@ -63,7 +63,7 @@ class MNetworkLCD:
             yield link_coms, node_coms, cur_f
 
 
-    def cal_optimization_community(self, cal_num = 100):
+    def cal_optimization_community(self, cal_num = 100, isOptimal=False):
         """利用划分密度进行树划分"""
 
         _curve = [0]*cal_num
@@ -89,8 +89,13 @@ class MNetworkLCD:
         self.func_curve = _curve
 
         d = dict()
-        d['link_coms'] = best_link_coms
-        d['node_coms'] = best_node_coms
+        # 这里待修改
+        if isOptimal:
+            d['link_coms'] = best_link_coms
+            d['node_coms'] = best_node_coms
+        else:
+            d['link_coms'] = best_link_coms
+            d['node_coms'] = best_node_coms
         d['curve'] = _curve
         d['max_f'] = max_f
         return d

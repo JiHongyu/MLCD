@@ -5,15 +5,25 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from validation import *
+import os
+import pickle
 
-repeat_num = 50
+from pylab import mpl
+mpl.rcParams['font.sans-serif'] = ['simsun']  # 指定默认字体
+mpl.rcParams['axes.unicode_minus'] = False  # 解决保存图像是负号'-'显示为方块的问题
 
-algo_col = ['mlcd', 'oifp', 'ifp', 'M', 'CPM']
-
-data = []
-
+repeat_num = 100
 path = 'temp/'
-input_cmd = mnets.lfr_cmd(n=500, k=18, maxk=35, mu=0, t1=2, on=20, om=2, minc=6, maxc=30)
+tempfile = path + 'algo_cmp.pickle'
+algo_col = ['MLCD', 'OInfomap', 'ifp', 'Louvain', 'CPM']
+
+if os.path.exists(tempfile):
+    data = pickle.load(open(tempfile, 'rb'))
+    repeat_num -= len(data)
+else:
+    data = []
+
+input_cmd = mnets.lfr_cmd(n=500, k=10, maxk=50, mu=0.1, t1=2, on=50, om=2, minc=10, maxc=40)
 
 for x in range(repeat_num):
 
@@ -51,5 +61,11 @@ for x in range(repeat_num):
         d.append(nmi)
 
     data.append(d)
+    pickle.dump(data, open(tempfile, 'wb'))
 
+
+os.remove(tempfile)
 df_res = pd.DataFrame(data, columns=algo_col)
+
+df_res.plot()
+plt.show()
