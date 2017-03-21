@@ -43,7 +43,7 @@ def community_fusion(networks, link_coms, node_coms):
 
     best_link_com = link_coms
     best_node_com = node_coms
-    curve = [0]
+    curve = [(0, 1)]
     while len(active_idx) > 1:
         best_val = heapq.heappop(h)
         x = best_val[1]
@@ -57,10 +57,10 @@ def community_fusion(networks, link_coms, node_coms):
                             cuting_density(len(coms_dict[x][1]), len(coms_dict[x][0])) - \
                             cuting_density(len(coms_dict[y][1]), len(coms_dict[y][0]))
 
-            if curve[-1] > 0 and delta_density + curve[-1] < 0:
+            if curve[-1][0] > 0 and delta_density + curve[-1][0] < 0:
                 best_link_com = [coms_dict[x][0] for x in active_idx]
                 best_node_com = [coms_dict[x][1] for x in active_idx]
-            curve.append(delta_density + curve[-1])
+            curve.append((delta_density + curve[-1][0], -best_val[0]))
 
             # 更新基本信息
             coms_dict[idx] = (new_link_com, new_node_com)

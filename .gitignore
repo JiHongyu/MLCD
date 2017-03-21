@@ -6,6 +6,7 @@ algos/__pycache__/
 tools/__pycache__/
 temp/
 result/
+result2/
 recoord/
 *.dat
 *.gml

@@ -11,7 +11,7 @@ class MNetwork:
         # 对每层未命名的网络命名
         idx = 1
         for net in networks:
-            if net.name == '':
+            if net.name is None or net.name == '':
                 net.name = 't%s' % idx
                 idx += 1
 

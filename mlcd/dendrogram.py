@@ -150,6 +150,7 @@ class Dendrogram:
 
         self.__inner_abd  = len(self.__node_set) - self.__inner - 1
         root.info = 'root'
+        root.simi = 0.0001
         return root
 
 

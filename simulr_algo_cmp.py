@@ -12,10 +12,10 @@ from pylab import mpl
 mpl.rcParams['font.sans-serif'] = ['simsun']  # 指定默认字体
 mpl.rcParams['axes.unicode_minus'] = False  # 解决保存图像是负号'-'显示为方块的问题
 
-repeat_num = 100
+repeat_num = 1000
 path = 'temp/'
 tempfile = path + 'algo_cmp.pickle'
-algo_col = ['MLCD', 'OInfomap', 'ifp', 'Louvain', 'CPM']
+algo_col = ['MLCD', 'Infomap', 'Louvain']
 
 if os.path.exists(tempfile):
     data = pickle.load(open(tempfile, 'rb'))
@@ -23,7 +23,7 @@ if os.path.exists(tempfile):
 else:
     data = []
 
-input_cmd = mnets.lfr_cmd(n=500, k=10, maxk=50, mu=0.1, t1=2, on=50, om=2, minc=10, maxc=40)
+input_cmd = mnets.lfr_cmd(n=500, k=10, maxk=50, mu=0.4, t1=2, on=50, om=2, minc=10, maxc=40)
 
 for x in range(repeat_num):
 
@@ -38,11 +38,15 @@ for x in range(repeat_num):
     louvain = algos.Louvain(networks)
 
     # (algo_func, parameters, option)
+    # algorithms = ((mlcd, None, True),
+    #               (infomap, '--overlapping --clu', False),
+    #               (infomap, '--clu', False),
+    #               (louvain, 'Modularity', False),
+    #               (louvain, 'CPM', False))
+
     algorithms = ((mlcd, None, True),
                   (infomap, '--overlapping --clu', False),
-                  (infomap, '--clu', False),
-                  (louvain, 'Modularity', False),
-                  (louvain, 'CPM', False))
+                  (louvain, 'Modularity', False))
 
     d = []
     for a, p, opti in algorithms:
