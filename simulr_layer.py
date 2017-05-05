@@ -20,7 +20,7 @@ def process_algorithm(lcd_algo, layer_num):
 
     # 设置相似计算函数，并计算连边相似性
     lcd_algo.set_linkpair_simi_algo(simi_algo)
-    lcd_algo.cal_linkpair_similarity()
+    lcd_algo.cal_dendrogram()
 
     # 系统树信息
     degram_info = lcd_algo.dendrogram.info

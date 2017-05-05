@@ -44,7 +44,7 @@ for x in range(repeat_number):
 
     # 3. 计算连边相似性
     print('3. 计算连边相似性')
-    lcd_algo.cal_linkpair_similarity()
+    lcd_algo.cal_dendrogram()
     dgram_info = lcd_algo.dendrogram.info
 
     # 4. 设置最优社团划算法

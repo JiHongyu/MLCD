@@ -24,7 +24,7 @@ class TreeNode:
 
         if isinstance(info, Edge):
             self.leaves.add(info)
-            self.simi = 1.0
+            self.simi = 2.0
 
 
 
@@ -81,7 +81,7 @@ class Dendrogram:
         self.__inner = 0
         self.__inner_abd = 0
         # 系统树根节点
-        self.__root = self.__generate_tree()
+        self.root = self.__generate_tree()
 
 
 
@@ -179,12 +179,12 @@ class Dendrogram:
             return {'name': '%s' % tree.info, 'children': children, 'hight': tree.simi}
 
     def serialize(self, tree=None):
-        return self.__serialize(tree=self.__root)
+        return self.__serialize(tree=self.root)
 
     def generate_community(self, cut_simi, least_com_num):
 
         # 系统树划分
-        subtrees = Dendrogram.__cut_tree(self.__root, cut_simi)
+        subtrees = Dendrogram.__cut_tree(self.root, cut_simi)
         # 在该划分结果下的边社团
         covers = []
         for tree in subtrees:
@@ -231,8 +231,8 @@ class Dendrogram:
     @property
     def info(self):
         d = dict()
-        d['depth'] = self.__root.depth
-        d['root'] = self.__root
+        d['depth'] = self.root.depth
+        d['root'] = self.root
         d['leaf_num'] = len(self.__node_set)
         d['pair_num'] = len(self.__node_pairs_data)
         d['pair_used'] = self.__pair_used

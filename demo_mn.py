@@ -26,7 +26,7 @@ lcd_algo.set_linkpair_simi_algo(mlcd.linkpair_simi_2)
 
 # 3. 计算连边相似性
 print('3. 计算连边相似性')
-lcd_algo.cal_linkpair_similarity()
+lcd_algo.cal_dendrogram()
 
 # 4. 设置最优社团划算法
 print('4. 设置最优社团划算法')
