@@ -81,8 +81,8 @@ print('LCD v2 NMI : %.4f, Community count %d' % (lcd_v2_nmi, len(lcd_v2_node_com
 print('MLCD NMI : %.4f, Community count %d' % (mlcd_nmi, len(mlcd_link_coms)))
 print('MLCD v2 NMI : %.4f, Community count %d' % (mlcd_v2_nmi, len(mlcd_v2_node_coms)))
 
-# plt.plot(result['curve'])
-# plt.show()
-#
-# plt.plot(c2)
-# plt.show()
+plt.plot(result['curve'])
+plt.show()
+
+plt.plot(c2)
+plt.show()

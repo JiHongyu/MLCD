@@ -7,15 +7,15 @@ import mlcd
 import mnets
 from validation import *
 import networkx as nx
-from pylab import mpl
 
+from pylab import mpl
 mpl.rcParams['font.sans-serif'] = ['simsun']  # 指定默认字体
 mpl.rcParams['axes.unicode_minus'] = False  # 解决保存图像是负号'-'显示为方块的问题
 
 path = '.\\result2\\'
 
 
-networks = nx.read_gexf(r'./result/karate_motif_0.gexf')
+networks = nx.read_gexf(r'./result/demo_3.gexf')
 
 # 多网络连边社团检测算法对象
 lcd_algo = mlcd.MNetworkLCD()
@@ -55,6 +55,25 @@ print('7. 生成可视化文件吧')
 print('8. 计算 Normalized mutual information')
 
 cor_node_coms, _ = preprocess_node_community(result['node_coms'], lcd_algo.node_set)
+lcd_link_coms = result['link_coms']
+lcd_node_coms = result['node_coms']
+
+c2, mlcd_link_coms, mlcd_node_coms = \
+    mlcd.community_fusion(None, lcd_link_coms, lcd_node_coms)
+
+label = 0
+for link_com in lcd_link_coms:
+    _attr = {edge.node(): str(label) for edge in link_com}
+    nx.set_edge_attributes(networks, 'lcd', _attr)
+    label += 1
+
+label = 0
+for link_com in mlcd_link_coms:
+    _attr = {edge.node(): str(label) for edge in link_com}
+    nx.set_edge_attributes(networks, 'mlcd', _attr)
+    label += 1
+
+nx.write_gexf(networks, r'./result/tempppp.gexf')
 
 plt.plot([(x+1)/cal_num for x in range(cal_num)], result['curve'])
 plt.xlabel('切分相似度门限 $s_t$')

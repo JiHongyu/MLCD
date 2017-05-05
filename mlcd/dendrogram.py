@@ -4,6 +4,7 @@ class TreeNode:
     Cnt = 0
 
     def __init__(self, info="node", parent=None):
+
         # 节点信息
         self.info = info
         # 父节点
@@ -29,14 +30,12 @@ class TreeNode:
 
     def merge_subtree(self, tree):
 
-
+        # 更新父子节点关系
         self.children.extend(tree.children)
-
         for child in tree.children:
             child.parent = self
 
         self.leaves.update(tree.leaves)
-
         pass
 
     @classmethod
@@ -113,7 +112,7 @@ class Dendrogram:
                 self.__pair_redu += 1
                 continue
 
-            if abs(2*simi - tree1.simi - tree2.simi) < 2*eps \
+            if abs(tree1.simi + tree2.simi - 2*simi) < 2*eps \
                     and (tree1.info == 'inner' or tree2.info == 'inner'):
                 # 两棵树相似性相同，可以直接将两棵子树的孩子合并
 
@@ -122,21 +121,35 @@ class Dendrogram:
                     remain_tree, left_tree = tree1, tree2
                 else:
                     remain_tree, left_tree = tree2, tree1
-
                 remain_tree.merge_subtree(left_tree)
-
                 for leaf in left_tree.leaves:
                     leave2tree[leaf] = remain_tree
+            # elif (tree1.simi - simi < eps or tree2.simi - simi < eps) and tree1.info == 'inner' and tree2.info == 'inner':
+            #     if tree1.simi - simi < eps:
+            #         t1, t2 = tree1, tree2
+            #     else:
+            #         t1, t2 = tree2, tree1
+            #
+            #     delta_simi = sum((t.simi - t2.simi for t in t1.children))
+            #     if delta_simi < eps:
+            #         t1.merge_subtree(t2)
+            #         for leaf in t2.leaves:
+            #             leave2tree[leaf] = t1
+            #     else:
+            #         # 两棵树相似性不同，需要添加新的节点进行融合
+            #         self.__inner += 1
+            #         new_tree = TreeNode.merge_tree(tree1, tree2, simi)
+            #         for leaf in tree1.leaves:
+            #             leave2tree[leaf] = new_tree
+            #         for leaf in tree2.leaves:
+            #             leave2tree[leaf] = new_tree
 
             else:
                 # 两棵树相似性不同，需要添加新的节点进行融合
-
                 self.__inner += 1
                 new_tree = TreeNode.merge_tree(tree1, tree2, simi)
-
                 for leaf in tree1.leaves:
                     leave2tree[leaf] = new_tree
-
                 for leaf in tree2.leaves:
                     leave2tree[leaf] = new_tree
 
@@ -148,9 +161,9 @@ class Dendrogram:
             self.__inner += 1
             root = TreeNode.merge_trees(rest_trees, 0)
 
-        self.__inner_abd  = len(self.__node_set) - self.__inner - 1
+        self.__inner_abd = len(self.__node_set) - self.__inner - 1
         root.info = 'root'
-        root.simi = 0.0001
+        # root.simi = 0.0001
         return root
 
 

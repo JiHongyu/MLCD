@@ -1,4 +1,4 @@
-import itertools
+from itertools import product
 import numpy as np
 ################################################
 # 多网络连边相似性计算可选函数，后面的函数均需按照接口规范
@@ -53,23 +53,40 @@ def linkpair_simi_2(networks, src, mid, dst, alpha: float = 0.5):
 
     num_of_nets = len(networks)
 
+    neig = dict()
+
+    for x in range(num_of_nets):
+        neig[(x, src)] = set(networks[x].neighbors(src)) | {src}
+        neig[(x, dst)] = set(networks[x].neighbors(dst)) | {dst}
+
+    inlayer_cnt = 0
+    crslayer_cnt = 0
+
     # 同层计算
-    for g1 in networks:
-        inlayer_numerator += len(set(g1.neighbors(src)) & set(g1.neighbors(dst)))
-        inlayer_denumerator += np.sqrt(len(g1.neighbors(src)) * len(g1.neighbors(dst)))
+    for x in range(num_of_nets):
+        if src in networks[x].neighbors(mid) and dst in networks[x].neighbors(mid):
+            inlayer_cnt += 1
+            inlayer_numerator += len(neig[(x, src)] & neig[(x, dst)])
+            inlayer_denumerator += np.sqrt(len(neig[(x, src)]) * len(neig[(x, dst)]))
+
+    if inlayer_cnt > 1:
+        inlayer_numerator /= inlayer_cnt
+        inlayer_denumerator /= inlayer_cnt
 
     # 跨层计算
-    for x in range(num_of_nets-1):
-        g1 = networks[x]
-        for g2 in networks[x+1:]:
-            crslayer_numerator += len(set(g1.neighbors(src)) & set(g2.neighbors(dst)))
-            crslayer_denumerator += np.sqrt(len(g1.neighbors(src)) * len(g2.neighbors(dst)))
+    for x, y in product(range(num_of_nets), range(num_of_nets)):
+        if x != y and src in networks[x].neighbors(mid) and \
+                      dst in networks[x].neighbors(mid):
+            crslayer_cnt += 1
+            crslayer_numerator += len(neig[(x, src)] & neig[(y, dst)])
+            crslayer_denumerator += np.sqrt(len(neig[(x, src)]) * len(neig[(y, dst)]))
 
-    if num_of_nets != 1:
-        simi_num = inlayer_numerator + 2 * alpha * crslayer_numerator / (num_of_nets - 1)
-        simi_den = inlayer_denumerator + 2 * alpha * crslayer_denumerator / (num_of_nets - 1)
-    else:
-        simi_num = inlayer_numerator
-        simi_den = inlayer_denumerator
+    if crslayer_cnt > 1:
+        crslayer_numerator /= crslayer_cnt
+        crslayer_denumerator /= crslayer_cnt
+
+    simi_num = alpha*inlayer_numerator + (1-alpha)*crslayer_numerator
+    simi_den = alpha*inlayer_denumerator + (1-alpha)*crslayer_denumerator
 
     return simi_num / simi_den if simi_den > 0.00001 else 0
+
