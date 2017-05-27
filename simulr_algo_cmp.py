@@ -23,7 +23,7 @@ if os.path.exists(tempfile):
 else:
     data = []
 
-input_cmd = mnets.lfr_cmd(n=500, k=10, maxk=50, mu=0.1, t1=2, on=50, om=2, minc=10, maxc=40)
+input_cmd = mnets.lfr_cmd(n=100, k=10, maxk=50, mu=0.1, t1=2, on=50, om=2, minc=10, maxc=40)
 
 for x in range(repeat_num):
 

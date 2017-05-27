@@ -13,7 +13,7 @@ from pylab import mpl
 mpl.rcParams['font.sans-serif'] = ['simsun']  # 指定默认字体
 mpl.rcParams['axes.unicode_minus'] = False  # 解决保存图像是负号'-'显示为方块的问题
 
-repeat_num = 10
+repeat_num = 100
 path = 'temp/'
 nmi_tempfile = path + 'algo_cmp.pickle'
 time_tempfile = path + 'algo_cmp_2.pickle'
@@ -27,7 +27,7 @@ else:
     nmi_data = []
     time_data = []
 
-input_cmd = mnets.lfr_cmd(n=1000, k=20, maxk=100, mu=0, t1=2, on=50, om=2, minc=20, maxc=50)
+input_cmd = mnets.lfr_cmd(n=1000, k=50, maxk=200, mu=0, t1=2, on=50, om=2, minc=80, maxc=200)
 
 for x in range(repeat_num):
 
@@ -41,7 +41,7 @@ for x in range(repeat_num):
     mlcd = algos.Mlcd(networks)
     mlcd_v2 = algos.Mlcd_v2(networks)
 
-    algorithms = ((mlcd_v2, None, True), (mlcd, None, True))
+    algorithms = ((mlcd_v2, None, True), (mlcd, None, False))
 
     d_nmi = []
     d_time = []
@@ -52,7 +52,10 @@ for x in range(repeat_num):
 
         nc = r['node_coms']
         lc = r['link_coms']
-        _, blc, bnc = community_fusion(None, lc, nc)
+        if opti:
+            _, blc, bnc = community_fusion(None, lc, nc)
+        else:
+            blc, bnc = lc, nc
         # if opti is True:
         #     opti_node_coms, qoc = preprocess_node_community(, nodes)
         # else:

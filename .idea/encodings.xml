@@ -10,6 +10,8 @@
     <file url="file://$PROJECT_DIR$/mnets/file.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/simulation.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/simulr_algo_cmp.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/simulr_algo_cmp_real_data.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/simulr_ca.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/simulr_layer.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/simulr_lcd_mlcd.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/simulr_similarity.py" charset="UTF-8" />
